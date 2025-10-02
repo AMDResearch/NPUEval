@@ -390,7 +390,7 @@ def main():
         # Model selection
         model_provider = st.selectbox(
             "Model Provider",
-            ["OpenAI", "Anthropic", "Ollama"],
+            ["Ollama", "OpenAI", "Anthropic"],
             help="Choose the LLM provider"
         )
         
@@ -432,6 +432,7 @@ def main():
             
         else:  # Ollama
             # Ollama configuration
+            api_key = None
             ollama_url = st.text_input(
                 "Ollama URL", 
                 value="http://localhost:11434",
