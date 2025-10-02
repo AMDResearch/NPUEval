@@ -245,7 +245,7 @@ def create_trace_visualization(trace_data: dict) -> go.Figure:
         st.error(f"Error creating trace visualization: {e}")
         return go.Figure()
 
-def run_kernel_generation(prompt: str, kernel_name: str, data_type: str, array_size: int, selected_model: str, api_key: str = None, agentic_mode: bool = True, status_text=None, progress_bar=None) -> Dict[str, Any]:
+def run_kernel_generation(prompt: str, kernel_name: str, data_type: str, array_size: int, selected_model: str, api_key: str = None, agentic_mode: bool = True, status_text=None, progress_bar=None, ollama_url=None) -> Dict[str, Any]:
     """
     Run the kernel generation pipeline.
     
@@ -272,7 +272,7 @@ def run_kernel_generation(prompt: str, kernel_name: str, data_type: str, array_s
             demo_kwargs['base_url'] = "https://api.anthropic.com/v1/"
 
         if selected_model.startswith('ollama'):
-            demo_kwargs['base_url'] = "http://localhost:11434/v1"
+            demo_kwargs['base_url'] = ollama_url
             selected_model = selected_model.replace('ollama:', '')
 
         # Initialize demo with selected model and local directory
@@ -397,7 +397,7 @@ def main():
             ["Ollama", "OpenAI", "Anthropic"],
             help="Choose the LLM provider"
         )
-        
+        ollama_url = None
         if model_provider == "OpenAI":
             # OpenAI API Key input
             api_key = os.environ.get('OPENAI_API_KEY', '')
@@ -563,7 +563,7 @@ def main():
                     
                     try:
                         # Run generation and update progress as we go
-                        result = run_kernel_generation(prompt, kernel_name, data_type, array_size, selected_model, api_key, agentic_mode, status_text, progress_bar)
+                        result = run_kernel_generation(prompt, kernel_name, data_type, array_size, selected_model, api_key, agentic_mode, status_text, progress_bar, ollama_url)
                         
                         progress_bar.progress(100)
                         status_text.text("✅ Generation complete!")
