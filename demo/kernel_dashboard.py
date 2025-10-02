@@ -262,14 +262,7 @@ def run_kernel_generation(prompt: str, kernel_name: str, data_type: str, array_s
         # Create a local directory for this run
         output_dir = "streamlit_results"
         os.makedirs(output_dir, exist_ok=True)
-        
-        # Initialize demo with selected model and local directory
-        demo_kwargs = {
-            'model': selected_model,
-            'output_dir': output_dir,
-            'max_retries': 3 if agentic_mode else 0
-        }
-        
+
         # Add API key if provided
         if api_key:
             demo_kwargs['api_key'] = api_key
@@ -277,9 +270,20 @@ def run_kernel_generation(prompt: str, kernel_name: str, data_type: str, array_s
         # Add base_url for Anthropic
         if selected_model.startswith('claude-'):
             demo_kwargs['base_url'] = "https://api.anthropic.com/v1/"
-            
+
+        if selected_model.startswith('ollama'):
+            demo_kwargs['base_url'] = "http://localhost:11434/v1"
+            selected_model = selected_model.replace('ollama:', '')
+
+        # Initialize demo with selected model and local directory
+        demo_kwargs = {
+            'model': selected_model,
+            'output_dir': output_dir,
+            'max_retries': 3 if agentic_mode else 0
+        }
+
         demo = NPUKernelDemo(**demo_kwargs)
-        
+
         # Update progress through each step
         if status_text and progress_bar:
             status_text.text("🔧 Compiling kernel...")
@@ -435,7 +439,7 @@ def main():
             api_key = None
             ollama_url = st.text_input(
                 "Ollama URL", 
-                value="http://localhost:11434",
+                value="http://localhost:11434/v1",
                 help="URL of your Ollama server"
             )
             
