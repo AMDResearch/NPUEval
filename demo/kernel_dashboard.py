@@ -262,7 +262,17 @@ def run_kernel_generation(prompt: str, kernel_name: str, data_type: str, array_s
         # Create a local directory for this run
         output_dir = "streamlit_results"
         os.makedirs(output_dir, exist_ok=True)
-       
+
+        # Initialize demo with selected model and local directory
+        demo_kwargs = {
+            'output_dir': output_dir,
+            'max_retries': 3 if agentic_mode else 0
+        }
+
+        # Add API key if provided
+        if api_key:
+            demo_kwargs['api_key'] = api_key
+
         # Add base_url for Anthropic
         if selected_model.startswith('claude-'):
             demo_kwargs['base_url'] = "https://api.anthropic.com/v1/"
@@ -271,16 +281,7 @@ def run_kernel_generation(prompt: str, kernel_name: str, data_type: str, array_s
             demo_kwargs['base_url'] = ollama_url
             selected_model = selected_model.replace('ollama:', '')
 
-        # Initialize demo with selected model and local directory
-        demo_kwargs = {
-            'model': selected_model,
-            'output_dir': output_dir,
-            'max_retries': 3 if agentic_mode else 0
-        }
-
-        # Add API key if provided
-        if api_key:
-            demo_kwargs['api_key'] = api_key
+        demo_kwargs['model'] = selected_model
 
         demo = NPUKernelDemo(**demo_kwargs)
 
