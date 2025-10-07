@@ -395,7 +395,7 @@ def main():
         # Model selection
         model_provider = st.selectbox(
             "Model Provider",
-            ["Ollama", "OpenAI", "Anthropic"],
+            ["OpenAI", "Anthropic", "Ollama"],
             help="Choose the LLM provider"
         )
         ollama_url = None
