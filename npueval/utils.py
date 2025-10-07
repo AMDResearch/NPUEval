@@ -75,7 +75,7 @@ def trace_to_json(trace_file: str, mlir_file: str, output_name: str="trace.json"
         raise Exception("Unsupported device")
     
     command = [
-        os.environ["MLIR_AIE_BUILD_DIR"]+"/python/utils/parse_trace.py",
+        os.environ["MLIR_AIE_BUILD_DIR"]+"/programming_examples/utils/parse_trace.py",
         "--input",
         trace_file,
         "--mlir",
