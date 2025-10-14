@@ -437,16 +437,21 @@ def main():
             
         else:  # Ollama
             # Ollama configuration
+            import ollama
             api_key = None
             ollama_url = st.text_input(
                 "Ollama URL", 
                 value="http://localhost:11434/v1",
                 help="URL of your Ollama server"
             )
-            
-            ollama_model = st.text_input(
+
+            client = ollama.Client(host=ollama_url.split('v1')[0])
+            models_info = client.list()
+            model_list = [model.model for model in models_info['models']]
+
+            ollama_model = st.selectbox(
                 "Ollama Model",
-                value="llama3.1:8b",
+                options=sorted(model_list),
                 help="Name of the Ollama model to use"
             )
             selected_model = f"ollama:{ollama_model}"
