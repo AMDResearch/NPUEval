@@ -48,9 +48,9 @@ RUN source /IRON/setup.sh && \
     cd /IRON/npueval && \
     python3 -m pip install .
 
-# Install jupyter for notebooks
+# Install jupyter and ollama for notebooks & demo
 RUN source /IRON/setup.sh && \
-    python3 -m pip install jupyterlab
+    python3 -m pip install jupyterlab ollama
 
 # (optional) This will only run if it detects docker/ryzen_ai-1.3.0ea1.tgz and docker/Xilinx.lic
 RUN /IRON/npueval/docker/install_aie_essentials.sh
